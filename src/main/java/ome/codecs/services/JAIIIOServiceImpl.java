@@ -32,6 +32,7 @@
 
 package ome.codecs.services;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.IOException;
@@ -147,6 +148,12 @@ public class JAIIIOServiceImpl extends AbstractService
     J2KImageReadParam param = (J2KImageReadParam) reader.getDefaultReadParam();
     if (options.resolution != null) {
       param.setResolution(options.resolution.intValue());
+    }
+    if (options.tileWidth > 0 || options.tileHeight > 0) {
+      Rectangle sourceRegion = new Rectangle(
+        options.tileGridXOffset, options.tileGridYOffset,
+        options.tileWidth, options.tileHeight);
+      param.setSourceRegion(sourceRegion);
     }
     BufferedImage image = reader.read(0, param);
     mciis.close();
